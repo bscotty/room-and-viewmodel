@@ -25,6 +25,8 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation"org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
+    implementation 'io.reactivex.rxjava2:rxandroid:2.0.2'
+    implementation 'io.reactivex:rxkotlin:2.0.0-RC1'
 
     // Support and Design Dependencies
     implementation 'com.android.support:appcompat-v7:27.1.0'
@@ -37,6 +39,9 @@ dependencies {
     kapt 'android.arch.lifecycle:compiler:1.1.1'
     implementation 'android.arch.persistence.room:runtime:1.0.0'
     kapt 'android.arch.persistence.room:compiler:1.0.0'
+
+    // Firebase
+    implementation 'com.firebase:firebase-client-android:2.5.2'
 
     testImplementation 'junit:junit:4.12'
 
