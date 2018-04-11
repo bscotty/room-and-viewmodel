@@ -25,14 +25,16 @@ class MainActivityViewModel(application: Application) : AndroidViewModel(applica
     }
 
     fun increment() {
+        count.value = content.value?.size ?: count.value
         if (count.value != null) {
             count.value = count.value!! + 1
         }
 
         Completable.fromAction {
-            contentDao.insertContent(Content("A Title"))
-        }.observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.io())
+            contentDao.insertContent(Content("A Title")) // the subscribeOn call ensures that this is done on the io thread.
+        }.observeOn(AndroidSchedulers.mainThread()) // All successive operations to be done on the main thread.
+                .subscribeOn(Schedulers.io()) // All prior and successive operations to be done on the io thread.
+                // ObserveOn takes precedence, so this is done on the main ui thread.
                 .subscribe(object : CompletableObserver {
                     override fun onComplete() { Log.v(this::class.java.canonicalName, "Content added successfully.") }
 

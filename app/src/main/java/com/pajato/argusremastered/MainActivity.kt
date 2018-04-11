@@ -29,6 +29,7 @@ class MainActivity : AppCompatActivity() {
             if (contentList != null) {
                 Snackbar.make(root, "" + contentList.size + objLoaded, Snackbar.LENGTH_LONG)
                         .show()
+                counter.text = contentList.size.toString()
             }
         })
 

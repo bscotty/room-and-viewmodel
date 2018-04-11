@@ -16,10 +16,10 @@ object IdGenerator {
         val timeStampChars = Array(8, { '0' })
         for (i in 0..7) {
             timeStampChars[i] = PUSH_CHARS[(now % 64).toInt()]
+            now = Math.floor((now / 64).toDouble()).toLong()
         }
-        now = Math.floor((now / 64).toDouble()).toLong()
 
-//        if (now != (0).toLong()) throw Error("We should have converted the entire timestamp.")
+        if (now != (0).toLong()) throw Error("We should have converted the entire timestamp.")
 
         // If the timestamp has changed, finish with our 12 random characters.
         if (!duplicateTime) {
