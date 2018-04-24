@@ -11,6 +11,7 @@ class Content() {
     @PrimaryKey @NonNull
     var id: String? = null
     var title: String? = null
+    var date: String? = null
 
     @Ignore
     constructor(title: String) : this() {

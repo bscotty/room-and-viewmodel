@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">Argus Remastered</string>
+    <string name="network">Network</string>
+    <string name="title">Title</string>
+    <string name="space" />
+    <string name="done">Done</string>
 </resources>

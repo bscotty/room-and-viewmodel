@@ -1,10 +1,12 @@
 package com.pajato.argusremastered
 
+import android.app.Activity
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
+import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
-import android.support.design.widget.Snackbar
+import android.support.v7.widget.LinearLayoutManager
 import android.view.View
 import com.pajato.argusremastered.model.Content
 import com.pajato.argusremastered.viewmodel.MainActivityViewModel
@@ -18,24 +20,41 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        viewModel = ViewModelProviders.of(this).get(MainActivityViewModel::class.java)
-        viewModel.count.observe(this, Observer<Int> { count ->
-            if (count != null) {
-                counter.text = count.toString()
-            }
-        })
+        val adapter = ContentAdapter(emptyList())
+        contentList.adapter = adapter
+        contentList.layoutManager = LinearLayoutManager(this)
 
+        viewModel = ViewModelProviders.of(this).get(MainActivityViewModel::class.java)
         viewModel.content.observe(this, Observer<MutableList<Content>> { contentList ->
             if (contentList != null) {
-                Snackbar.make(root, "" + contentList.size + objLoaded, Snackbar.LENGTH_LONG)
-                        .show()
-                counter.text = contentList.size.toString()
+                adapter.items = contentList
+                adapter.notifyDataSetChanged()
             }
         })
 
     }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (resultCode == Activity.RESULT_OK && data != null) {
+            when (requestCode) {
+                ENTER_REQUEST -> {
+                    val title = data.getStringExtra(EnterActivity.TITLE_KEY)
+                    val content = Content(title)
+                    viewModel.addContent(content)
+                }
+            }
+
+        }
+    }
+
+    @Suppress("UNUSED_PARAMETER")
     fun fabClick(view: View) {
-        viewModel.increment()
+        val intent = Intent(this, EnterActivity::class.java)
+        startActivityForResult(intent, ENTER_REQUEST)
+    }
+
+    companion object {
+        const val ENTER_REQUEST = 0
     }
 }

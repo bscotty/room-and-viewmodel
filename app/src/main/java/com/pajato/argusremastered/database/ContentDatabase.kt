@@ -6,7 +6,7 @@ import android.arch.persistence.room.RoomDatabase
 import android.content.Context
 import com.pajato.argusremastered.model.Content
 
-@Database(entities = [Content::class], version = 1)
+@Database(entities = [Content::class], version = 2)
 abstract class ContentDatabase : RoomDatabase() {
     abstract fun contentDao(): ContentDao
 
@@ -24,6 +24,7 @@ abstract class ContentDatabase : RoomDatabase() {
             val builder: RoomDatabase.Builder<ContentDatabase> = Room.databaseBuilder(context.applicationContext,
                     ContentDatabase::class.java,
                     DatabaseEntry.TABLE_NAME)
+                    .fallbackToDestructiveMigration()
             return builder.build()
         }
     }

@@ -1,7 +1,6 @@
 package com.pajato.argusremastered.database
 
 import android.arch.lifecycle.LiveData
-import android.arch.lifecycle.MutableLiveData
 import android.arch.persistence.room.*
 import com.pajato.argusremastered.model.Content
 
@@ -12,6 +11,9 @@ interface ContentDao {
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     fun insertContent(content: Content)
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun updateContent(content: Content)
 
     @Delete()
     fun deleteContent(content: Content)
