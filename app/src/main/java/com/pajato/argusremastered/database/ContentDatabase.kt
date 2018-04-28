@@ -6,7 +6,7 @@ import android.arch.persistence.room.RoomDatabase
 import android.content.Context
 import com.pajato.argusremastered.model.Content
 
-@Database(entities = [Content::class], version = 2)
+@Database(entities = [Content::class], version = 4)
 abstract class ContentDatabase : RoomDatabase() {
     abstract fun contentDao(): ContentDao
 

@@ -11,11 +11,14 @@ class Content() {
     @PrimaryKey @NonNull
     var id: String? = null
     var title: String? = null
+    var network: String? = null
     var date: String? = null
+    var location: String? = null
 
     @Ignore
-    constructor(title: String) : this() {
+    constructor(title: String, network: String) : this() {
         this.title = title
+        this.network = network
         generateId()
     }
 

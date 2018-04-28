@@ -2,6 +2,8 @@ package com.pajato.argusremastered
 
 import android.app.Activity
 import android.content.Intent
+import android.os.Build
+import android.support.test.InstrumentationRegistry
 import android.support.test.espresso.Espresso
 import android.support.test.espresso.assertion.ViewAssertions
 import android.support.test.espresso.intent.Intents
@@ -10,6 +12,10 @@ import android.support.test.espresso.intent.rule.IntentsTestRule
 import android.support.test.espresso.matcher.ViewMatchers
 import android.support.test.rule.ActivityTestRule
 import android.support.test.runner.AndroidJUnit4
+import android.support.test.uiautomator.UiDevice
+import android.support.test.uiautomator.UiObjectNotFoundException
+import android.support.test.uiautomator.UiSelector
+import android.util.Log
 import android.view.View
 import org.hamcrest.Matcher
 import org.junit.Rule
@@ -20,7 +26,8 @@ import org.junit.runner.RunWith
  *
  * @author Paul Michael Reilly --- pmr@pajato.com
  */
-@RunWith(AndroidJUnit4::class) abstract class ActivityTestBase<T : Activity>(theClass: Class<T>) {
+@RunWith(AndroidJUnit4::class)
+abstract class ActivityTestBase<T : Activity>(theClass: Class<T>) {
 
     /** Define the component under test using a JUnit rule. */
     @Rule
@@ -51,5 +58,20 @@ import org.junit.runner.RunWith
         Intents.release()
 
         rule.launchActivity(intent)
+    }
+
+    /** A shorthand method that will accept or deny the permission popup. */
+    protected fun respondToPermission(allow: Boolean) {
+        if (Build.VERSION.SDK_INT >= 23) {
+            val s = if (allow) "ALLOW" else "DENY"
+            val allowPermissions = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation()).findObject(UiSelector().text(s))
+            if (allowPermissions.exists()) {
+                try {
+                    allowPermissions.click()
+                } catch (e: UiObjectNotFoundException) {
+                    Log.v(this::class.java.canonicalName, "Click Machine Broke")
+                }
+            }
+        }
     }
 }

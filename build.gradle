@@ -2,12 +2,13 @@
 
 buildscript {
     ext.kotlin_version = '1.2.30'
+    ext.gradleVersion = '3.1.2'
     repositories {
         google()
         jcenter()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.1.1'
+        classpath "com.android.tools.build:gradle:$gradleVersion"
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
 
         // NOTE: Do not place your application dependencies here; they belong
@@ -24,4 +25,12 @@ allprojects {
 
 task clean(type: Delete) {
     delete rootProject.buildDir
+}
+
+ext {
+    espressoVersion = '3.0.1'
+    gmsLibraryVersion = '15.0.0'
+    lifecycleVersion = '1.1.1'
+    roomVersion = '1.0.0'
+    supportLibraryVersion = '27.1.1'
 }

@@ -6,10 +6,7 @@ import android.arch.lifecycle.LiveData
 import android.util.Log
 import com.pajato.argusremastered.database.ContentDao
 import com.pajato.argusremastered.database.ContentDatabase
-import com.pajato.argusremastered.model.Content
-import com.pajato.argusremastered.model.DeleteEvent
-import com.pajato.argusremastered.model.Event
-import com.pajato.argusremastered.model.UpdateEvent
+import com.pajato.argusremastered.model.*
 import com.pajato.argusremastered.util.RxBus
 import io.reactivex.Completable
 import io.reactivex.CompletableObserver
@@ -17,6 +14,8 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.functions.Consumer
+import java.text.DateFormat
+import java.util.*
 
 
 class MainActivityViewModel(application: Application) : AndroidViewModel(application), Consumer<Event> {
@@ -24,22 +23,19 @@ class MainActivityViewModel(application: Application) : AndroidViewModel(applica
     var content: LiveData<MutableList<Content>> = contentDao.getAllContent()
     private val eventListeners = listOf(RxBus.subscribeToEventType(Event::class.java, this))
 
-    fun increment() {
-        val inc = Completable.fromAction {
-            contentDao.insertContent(Content("A Title"))
-        }
-        observeAndSubscribeTo(inc)
-    }
-
     override fun accept(t: Event?) {
         when (t) {
             is DeleteEvent -> {
                 val c: Content = t.getData()
                 deleteContent(c)
             }
-            is UpdateEvent -> {
+            is WatchedEvent -> {
                 val c: Content = t.getData()
-                c.date = "A Date"
+                c.date = DateFormat.getDateInstance().format(Date())
+                updateContent(c)
+            }
+            is LocationResultEvent -> {
+                val c: Content = t.getData()
                 updateContent(c)
             }
         }
